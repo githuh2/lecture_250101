@@ -619,7 +619,14 @@
         // CSV 파일 로드 및 일정 렌더링
         async function loadSchedule() {
             try {
-                const response = await fetch('lecture_schedule.csv');
+                // 캐시 방지를 위해 타임스탬프 추가
+                const timestamp = new Date().getTime();
+                const response = await fetch(`lecture_schedule.csv?t=${timestamp}`, {
+                    cache: 'no-cache',
+                    headers: {
+                        'Cache-Control': 'no-cache'
+                    }
+                });
                 const csvText = await response.text();
                 const scheduleData = parseCSV(csvText);
                 renderSchedule(scheduleData);
